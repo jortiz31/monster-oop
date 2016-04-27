@@ -1,42 +1,101 @@
-# Monster class
-  # getters and setters for instance variables
+class Monster
+  attr_accessor :threat_level, :habitat, :name
 
-  # class variable for count
+  @@count = 0
 
-  # class instance variable for class description
+  @class_description = "A scary monster!"
 
-  # class method getter for @@count class variable
+  def self.count
+    @@count
+  end
 
-  # class method getter for @class_description class instance variable
+  def self.class_description
+    @class_description
+  end
 
-  # initial behavior
+  def initialize(threat_level=:medium)
+    @threat_level = threat_level
+    puts "Rawr!"
+    @@count = @@count + 1
+    puts "#{@@count} monsters now roam the world!"
+  end
 
-  # habitat? instance method
+  def habitat?(some_hab)
+    @habitat == some_hab
+  end
 
-  # get_dangerous instance method
+  def get_dangerous
+    case @threat_level
+      when :low
+        @threat_level = :medium
+      when :medium
+        @threat_level = :high
+      when :high
+        @threat_level = :midnight
+      when :midnight
+        :midnight
+    end
+  end
 
-  # fight class method
+  def self.fight(monster1, monster2)
+    if monster1.threat_level == monster2.threat_level
+      monster2
+    elsif monster1.threat_level == :low
+      monster2
+    elsif monster1.threat_level == :medium
+      if monster2.threat_level == :low
+        monster1
+      else
+        monster2
+      end
+    else
+      if monster2.threat_level == :midnight
+        monster2
+      else
+        monster1
+      end
+    end
+  end
+end
 
-# Zombie class
 
-  # zombie version of class_description
-  
-  # initial behavior and values
+class Zombie < Monster
 
-# Werewolf class
+  @class_description = "Shuffling, decaying flesh. Hungry and without remorse!"
 
-  # werewolf version of class_description
+  def initialize (threat_level=:medium)
+    super(threat_level)
+    @habitat = "graveyard"
+  end
+end
 
-  # initial behavior and values
+class Werewolf < Monster
 
-  # update_threat_level instance method
 
-# Flying module
+  @class_description = "A man... a wolf... a monster!"
 
-  #fly method
+  def initialize (threat_level=:low)
+    super(threat_level)
+  end
 
-# Vampire class
+  def update_threat_level(full_moon)
+    if full_moon
+      @threat_level = :midnight
+    else
+      @threat_level = :low
+    end
+    @threat_level
+  end
+end
 
-  # vampire class description
 
-  # Flying module included
+module Flying
+  def fly
+    puts "#{self.name || "it"} soars through the air"
+  end
+end
+
+class Vampire < Monster
+  @class_description = "Dark and sparly."
+  include Flying
+end
